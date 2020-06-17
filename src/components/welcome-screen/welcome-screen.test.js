@@ -4,10 +4,13 @@ import WelcomeScreen from './welcome-screen';
 
 const errorCount = 3;
 
+const onWelcomeButtonClick = () => {};
+
 it(`welcome-scrin should render errorCount`, () => {
   const tree = renderer
     .create(<WelcomeScreen
       errorCount={errorCount}
+      onWelcomeButtonClick = {onWelcomeButtonClick}
     />)
     .toJSON();
 
