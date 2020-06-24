@@ -10,7 +10,6 @@ class QuestionGenre extends PureComponent {
     };
   }
 
-
   render() {
     const {questions, onAnswer} = this.props;
     const {answers: userAnswers} = this.state;
@@ -54,6 +53,7 @@ class QuestionGenre extends PureComponent {
                   </div>
                   <div className="game__answer">
                     <input className="game__input visually-hidden" type="checkbox" name="answer" value={`answer-${i}`} id={`answer-${i}`}
+                      checked={userAnswers[i]}
                       onChange={(evt) => {
                         const value = evt.target.checked;
                         this.setState({

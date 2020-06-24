@@ -1,9 +1,10 @@
 import React from 'react';
-import Enzyme, {shallow} from 'enzyme';
+import {shallow, configure} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import WelcomeScreen from './welcome-screen';
 
-Enzyme.configure({
+import WelcomeScreen from './welcome-screen.jsx';
+
+configure({
   adapter: new Adapter(),
 });
 
