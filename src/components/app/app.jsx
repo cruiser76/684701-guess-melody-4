@@ -25,11 +25,7 @@ class App extends PureComponent {
       return (
         <WelcomeScreen
           errorCount={errorCount}
-          onWelcomeButtonClick={() => {
-            this.setState({
-              step: 0
-            });
-          }}
+          onWelcomeButtonClick={() => this.setState({step: 0})}
         />
       );
     }
@@ -41,9 +37,7 @@ class App extends PureComponent {
             <QuestionArtist
               questions={question}
               onAnswer={() => {
-                this.setState((prevState) => {
-                  return {step: prevState.step + 1};
-                });
+                this.setState((prevState) => ({step: prevState.step + 1}));
               }}
             />
           );
@@ -52,9 +46,7 @@ class App extends PureComponent {
             <QuestionGenre
               questions={question}
               onAnswer={() => {
-                this.setState((prevState) => {
-                  return {step: prevState.step + 1};
-                });
+                this.setState((prevState) => ({step: prevState.step + 1}));
               }}
             />
           );
@@ -75,13 +67,13 @@ class App extends PureComponent {
           <Route exact path="/dev-artist">
             <QuestionArtist
               questions={questions[0]}
-              onAnswer={()=>{}}
+              onAnswer={() => {}}
             />
           </Route>
           <Route exact path="/dev-genre">
             <QuestionGenre
               questions={questions[1]}
-              onAnswer={()=>{}}
+              onAnswer={() => {}}
             />
           </Route>
         </Switch>
