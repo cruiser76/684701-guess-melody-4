@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './components/app/app.jsx';
+import questions from './components/mocks/questions.js';
 
 const init = () => {
   const Settings = {
@@ -11,6 +12,7 @@ const init = () => {
   ReactDOM.render(
       <App
         errorCount = {Settings.ERROR_COUNT}
+        questions = {questions}
       />,
       document.querySelector(`#root`)
   );
