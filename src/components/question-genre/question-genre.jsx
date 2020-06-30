@@ -1,18 +1,21 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
+import AudioPlayer from './../audio-player/audio-player.jsx';
+
 class QuestionGenre extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      answers: [false, false, false, false]
+      answers: [false, false, false, false],
+      playerId: 0
     };
   }
 
   render() {
     const {questions, onAnswer} = this.props;
-    const {answers: userAnswers} = this.state;
+    const {answers: userAnswers, playerId} = this.state;
     const {genre, answers} = questions;
 
     return (
@@ -38,19 +41,23 @@ class QuestionGenre extends PureComponent {
         <section className="game__screen">
           <h2 className="game__title">Выберите {genre} треки</h2>
           <form className="game__tracks"
-            onSubmit={(evt)=> {
+            onSubmit={(evt) => {
               evt.preventDefault();
               onAnswer(questions, this.state.answers);
             }}
           >
 
             {answers.map((el, i) => {
+              const src = answers[i].src;
               return (
                 <div className="track" key={`${i} - ${el.genre}`}>
-                  <button className="track__button track__button--play" type="button"></button>
-                  <div className="track__status">
-                    <audio src={el.src} />
-                  </div>
+                  <AudioPlayer
+                    isPlaying={playerId === i}
+                    src={src}
+                    onPlayButtonClick={() => {
+                      this.setState({playerId: playerId === i ? -1 : i});
+                    }}
+                  />
                   <div className="game__answer">
                     <input className="game__input visually-hidden" type="checkbox" name="answer" value={`answer-${i}`} id={`answer-${i}`}
                       checked={userAnswers[i]}

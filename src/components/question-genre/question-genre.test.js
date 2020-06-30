@@ -1,5 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+
 import QuestionGenre from './question-genre.jsx';
 
 const questions = {
@@ -22,12 +23,15 @@ const questions = {
 
 it(`QuestionGenre sould render`, () => {
   const tree = renderer
-    .create(
-        <QuestionGenre
-          questions={questions}
-          onAnswer={() => {}}
-        />
-    ).toJSON();
+    .create((
+      <QuestionGenre
+        questions={questions}
+        onAnswer={() => {}}
+      />), {
+      createNodeMock: () => {
+        return {};
+      }
+    }).toJSON();
 
   expect(tree).toMatchSnapshot();
 });
