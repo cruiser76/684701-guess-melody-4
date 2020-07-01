@@ -1,5 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+
 import QuestionArtist from './question-artist.jsx';
 
 const questions = {
@@ -20,14 +21,18 @@ const questions = {
   }]
 };
 
+
 it(`QuestionArtist sould render`, () => {
   const tree = renderer
-    .create(
-        <QuestionArtist
-          questions={questions}
-          onAnswer={() => {}}
-        />
-    ).toJSON();
+    .create((
+      <QuestionArtist
+        questions={questions}
+        onAnswer={() => {}}
+      />), {
+      createNodeMock: () => {
+        return {};
+      }
+    }).toJSON();
 
   expect(tree).toMatchSnapshot();
 });
