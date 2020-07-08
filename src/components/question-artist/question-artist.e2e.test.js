@@ -42,6 +42,7 @@ it(`click on user answer sould pass to the callback data-object from which this 
   const screen = shallow(<QuestionArtist
     onAnswer={onAnswer}
     questions={questions}
+    userErrors={3}
   />);
 
   const answerOne = screen.find(`input`).at(0);

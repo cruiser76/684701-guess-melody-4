@@ -1,7 +1,9 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {connect} from 'react-redux';
 
+import {incrementStep, incrementErrors, checkNewGame} from './../../redux/actions.js';
 import {GameType} from './../../const.js';
 import WelcomeScreen from './../welcome-screen/welcome-screen.jsx';
 import QuestionArtist from './../question-artist/question-artist.jsx';
@@ -10,22 +12,17 @@ import QuestionGenre from './../question-genre/question-genre.jsx';
 class App extends PureComponent {
   constructor(props) {
     super(props);
-
-    this.state = {
-      step: -1
-    };
   }
 
   _renderGameScreen() {
-    const {errorCount, questions} = this.props;
-    const {step} = this.state;
+    const {errorCount, questions, step, onAnswer, onWelcomeButtonClick, userErrors} = this.props;
     const question = questions[step];
 
-    if (step === -1 || step >= questions.length) {
+    if (step === -1) {
       return (
         <WelcomeScreen
           errorCount={errorCount}
-          onWelcomeButtonClick={() => this.setState({step: 0})}
+          onWelcomeButtonClick={onWelcomeButtonClick}
         />
       );
     }
@@ -36,18 +33,16 @@ class App extends PureComponent {
           return (
             <QuestionArtist
               questions={question}
-              onAnswer={() => {
-                this.setState((prevState) => ({step: prevState.step + 1}));
-              }}
+              onAnswer={onAnswer}
+              userErrors={userErrors}
             />
           );
         case GameType.GENRE:
           return (
             <QuestionGenre
               questions={question}
-              onAnswer={() => {
-                this.setState((prevState) => ({step: prevState.step + 1}));
-              }}
+              onAnswer={onAnswer}
+              userErrors={userErrors}
             />
           );
       }
@@ -56,7 +51,7 @@ class App extends PureComponent {
   }
 
   render() {
-    const {questions} = this.props;
+    const {questions, userErrors} = this.props;
 
     return (
       <BrowserRouter>
@@ -68,23 +63,49 @@ class App extends PureComponent {
             <QuestionArtist
               questions={questions[0]}
               onAnswer={() => {}}
+              userErrors={userErrors}
             />
           </Route>
           <Route exact path="/dev-genre">
             <QuestionGenre
               questions={questions[1]}
               onAnswer={() => {}}
+              userErrors={userErrors}
             />
           </Route>
         </Switch>
       </BrowserRouter>);
-
   }
 }
 
-App.propTypes = {
-  errorCount: PropTypes.number.isRequired,
-  questions: PropTypes.array.isRequired
+const mapStateToProps = (state) => {
+  return {
+    step: state.step,
+    questions: state.questions,
+    errorCount: state.maxErrors,
+    userErrors: state.errors
+  };
 };
 
-export default App;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAnswer: (question, answer) => {
+      dispatch(incrementStep());
+      dispatch(incrementErrors(question, answer));
+      dispatch(checkNewGame());
+    },
+    onWelcomeButtonClick: () => dispatch(incrementStep())
+  };
+};
+
+App.propTypes = {
+  errorCount: PropTypes.number.isRequired,
+  questions: PropTypes.array.isRequired,
+  step: PropTypes.number.isRequired,
+  onAnswer: PropTypes.func.isRequired,
+  onWelcomeButtonClick: PropTypes.func.isRequired,
+  userErrors: PropTypes.number.isRequired
+};
+
+export {App};
+export default connect(mapStateToProps, mapDispatchToProps)(App);

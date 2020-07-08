@@ -35,6 +35,7 @@ it(`clicking on the artist button will trigger the event handler and pass the qu
       <QuestionGenre
         questions={questions}
         onAnswer={onAnswer}
+        userErrors={3}
       />
   );
 
