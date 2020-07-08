@@ -1,6 +1,8 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import AudioPlayer from '../audio-player/audio-player.jsx';
+
+import AudioPlayer from './../audio-player/audio-player.jsx';
+import Errors from './../errors/errors.jsx';
 
 export default class QuestionArtist extends PureComponent {
   constructor(props) {
@@ -12,10 +14,11 @@ export default class QuestionArtist extends PureComponent {
   }
 
   render() {
-    const {questions, onAnswer} = this.props;
+    const {questions, onAnswer, userErrors} = this.props;
     const {track, answers} = questions;
     const {playerId} = this.state;
     const src = track.src;
+
     return (
       <section className="game game--artist">
         <header className="game__header">
@@ -29,11 +32,9 @@ export default class QuestionArtist extends PureComponent {
             />
           </svg>
 
-          <div className="game__mistakes">
-            <div className="wrong"></div>
-            <div className="wrong"></div>
-            <div className="wrong"></div>
-          </div>
+          <Errors
+            userErrors={userErrors}
+          />
         </header>
 
         <section className="game__screen">
@@ -86,5 +87,6 @@ QuestionArtist.propTypes = {
     }),
     type: PropTypes.string.isRequired
   }),
-  onAnswer: PropTypes.func.isRequired
+  onAnswer: PropTypes.func.isRequired,
+  userErrors: PropTypes.number.isRequired
 };

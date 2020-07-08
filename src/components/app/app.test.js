@@ -1,6 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import App from './app.jsx';
+
+import {App} from './app.jsx';
 
 const errorCount = 3;
 
@@ -47,9 +48,15 @@ it(`App should render App`, () => {
         <App
           errorCount={errorCount}
           questions={questions}
-        />
-    )
-    .toJSON();
+          userErrors={0}
+          onWelcomeButtonClick={()=>{}}
+          onAnswer={()=>{}}
+          step={-1}
+        />, {
+          createNodeMock: () => {
+            return {};
+          }
+        }).toJSON();
 
   expect(tree).toMatchSnapshot();
 });

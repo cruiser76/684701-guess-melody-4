@@ -2,6 +2,8 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
 import AudioPlayer from './../audio-player/audio-player.jsx';
+import Errors from './../errors/errors.jsx';
+
 
 class QuestionGenre extends PureComponent {
   constructor(props) {
@@ -14,7 +16,7 @@ class QuestionGenre extends PureComponent {
   }
 
   render() {
-    const {questions, onAnswer} = this.props;
+    const {questions, onAnswer, userErrors} = this.props;
     const {answers: userAnswers, playerId} = this.state;
     const {genre, answers} = questions;
 
@@ -31,11 +33,9 @@ class QuestionGenre extends PureComponent {
               style={{filter: `url(#blur)`, transform: `rotate(-90deg) scaleY(-1)`, transformOrigin: `center`}} />
           </svg>
 
-          <div className="game__mistakes">
-            <div className="wrong"></div>
-            <div className="wrong"></div>
-            <div className="wrong"></div>
-          </div>
+          <Errors
+            userErrors={userErrors}
+          />
         </header>
 
         <section className="game__screen">
@@ -89,7 +89,8 @@ QuestionGenre.propTypes = {
       genre: PropTypes.string.isRequired
     })).isRequired
   }).isRequired,
-  onAnswer: PropTypes.func.isRequired
+  onAnswer: PropTypes.func.isRequired,
+  userErrors: PropTypes.number.isRequired
 };
 
 export default QuestionGenre;
