@@ -1,4 +1,4 @@
-import {ActionType} from './actionType.js';
+import {ActionType} from './action-type.js';
 import {GameType} from './../const.js';
 
 export function incrementStep() {
@@ -36,8 +36,8 @@ export function incrementErrors(question, answer) {
   };
 }
 
-export function checkNewGame() {
+export function resetGame() {
   return {
-    type: ActionType.CHECK_NEW_GAME
+    type: ActionType.RESET_GAME
   };
 }

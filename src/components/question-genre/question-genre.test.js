@@ -28,6 +28,9 @@ it(`QuestionGenre sould render`, () => {
         questions={questions}
         onAnswer={() => {}}
         userErrors={3}
+        renderPlayer={()=>{}}
+        onChange={()=>{}}
+        userAnswers={[false, false, false, false]}
       />), {
       createNodeMock: () => {
         return {};

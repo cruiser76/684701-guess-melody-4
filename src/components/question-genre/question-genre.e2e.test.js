@@ -36,6 +36,9 @@ it(`clicking on the artist button will trigger the event handler and pass the qu
         questions={questions}
         onAnswer={onAnswer}
         userErrors={3}
+        renderPlayer={()=>{}}
+        onChange={()=>{}}
+        userAnswers={userAnswer}
       />
   );
 
@@ -47,8 +50,7 @@ it(`clicking on the artist button will trigger the event handler and pass the qu
 
   expect(onAnswer).toHaveBeenCalledTimes(1);
 
-  expect(onAnswer.mock.calls[0][0]).toMatchObject(questions);
-  expect(onAnswer.mock.calls[0][1]).toMatchObject(userAnswer);
+  expect(onAnswer.mock.calls[0][0]).toEqual(void 0);
 
   expect(
       screen.find(`input`).map((it) => it.prop(`checked`))

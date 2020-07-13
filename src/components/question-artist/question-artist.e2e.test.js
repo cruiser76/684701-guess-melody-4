@@ -43,6 +43,7 @@ it(`click on user answer sould pass to the callback data-object from which this 
     onAnswer={onAnswer}
     questions={questions}
     userErrors={3}
+    renderPlayer={()=> {}}
   />);
 
   const answerOne = screen.find(`input`).at(0);

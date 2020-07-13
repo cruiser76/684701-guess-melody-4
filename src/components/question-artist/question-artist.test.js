@@ -22,12 +22,13 @@ const questions = {
 };
 
 
-it(`QuestionArtist sould render`, () => {
+it(`QuestionArtist render correctly`, () => {
   const tree = renderer
     .create((
       <QuestionArtist
         questions={questions}
         onAnswer={() => {}}
+        renderPlayer={() => {}}
         userErrors={3}
       />), {
       createNodeMock: () => {

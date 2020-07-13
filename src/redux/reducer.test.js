@@ -1,6 +1,6 @@
 import reducer from './reducer.js';
 import questions from './../components/mocks/questions.js';
-import {ActionType} from './actionType.js';
+import {ActionType} from './action-type.js';
 
 it(`Reducer without add parameters return initial state`, () => {
   expect(reducer(undefined, {})).toEqual({
