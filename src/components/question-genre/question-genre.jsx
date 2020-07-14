@@ -1,23 +1,12 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
-import AudioPlayer from './../audio-player/audio-player.jsx';
 import Errors from './../errors/errors.jsx';
 
-
 class QuestionGenre extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      answers: [false, false, false, false],
-      playerId: 0
-    };
-  }
 
   render() {
-    const {questions, onAnswer, userErrors} = this.props;
-    const {answers: userAnswers, playerId} = this.state;
+    const {questions, onAnswer, userErrors, renderPlayer, userAnswers, onChange} = this.props;
     const {genre, answers} = questions;
 
     return (
@@ -43,7 +32,7 @@ class QuestionGenre extends PureComponent {
           <form className="game__tracks"
             onSubmit={(evt) => {
               evt.preventDefault();
-              onAnswer(questions, this.state.answers);
+              onAnswer();
             }}
           >
 
@@ -51,21 +40,13 @@ class QuestionGenre extends PureComponent {
               const src = answers[i].src;
               return (
                 <div className="track" key={`${i} - ${el.genre}`}>
-                  <AudioPlayer
-                    isPlaying={playerId === i}
-                    src={src}
-                    onPlayButtonClick={() => {
-                      this.setState({playerId: playerId === i ? -1 : i});
-                    }}
-                  />
+                  {renderPlayer(src, i)}
                   <div className="game__answer">
                     <input className="game__input visually-hidden" type="checkbox" name="answer" value={`answer-${i}`} id={`answer-${i}`}
                       checked={userAnswers[i]}
                       onChange={(evt) => {
                         const value = evt.target.checked;
-                        this.setState({
-                          answers: [...userAnswers.slice(0, i), value, ...userAnswers.slice(i + 1)]
-                        });
+                        onChange(i, value);
                       }}
                     />
                     <label className="game__check" htmlFor={`answer-${i}`}>Отметить</label>
@@ -90,7 +71,10 @@ QuestionGenre.propTypes = {
     })).isRequired
   }).isRequired,
   onAnswer: PropTypes.func.isRequired,
-  userErrors: PropTypes.number.isRequired
+  userErrors: PropTypes.number.isRequired,
+  renderPlayer: PropTypes.func.isRequired,
+  userAnswers: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 export default QuestionGenre;

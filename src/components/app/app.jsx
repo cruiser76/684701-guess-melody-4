@@ -3,11 +3,18 @@ import PropTypes from 'prop-types';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {connect} from 'react-redux';
 
-import {incrementStep, incrementErrors, checkNewGame} from './../../redux/actions.js';
+import {incrementStep, incrementErrors, resetGame} from './../../redux/actions.js';
 import {GameType} from './../../const.js';
 import WelcomeScreen from './../welcome-screen/welcome-screen.jsx';
 import QuestionArtist from './../question-artist/question-artist.jsx';
 import QuestionGenre from './../question-genre/question-genre.jsx';
+import withActivePlayer from './../../hocs/with-active-player/with-active-player.jsx';
+import withUserAnswer from './../../hocs/with-user-answer/with-user-answer.jsx';
+import WinScreen from './../win-screen/win-screen.jsx';
+import GameOverScreen from '../game-over-screen/game-over-screen.jsx';
+
+const ArtistQuestionScreenWrapped = withActivePlayer(QuestionArtist);
+const GenreQuestionScreenWrapped = withActivePlayer(withUserAnswer(QuestionGenre));
 
 class App extends PureComponent {
   constructor(props) {
@@ -15,7 +22,7 @@ class App extends PureComponent {
   }
 
   _renderGameScreen() {
-    const {errorCount, questions, step, onAnswer, onWelcomeButtonClick, userErrors} = this.props;
+    const {errorCount, questions, step, onAnswer, onWelcomeButtonClick, userErrors, onReplayBtnClick} = this.props;
     const question = questions[step];
 
     if (step === -1) {
@@ -27,11 +34,11 @@ class App extends PureComponent {
       );
     }
 
-    if (question) {
+    if (question && (userErrors < errorCount)) {
       switch (question.type) {
         case GameType.ARTIST:
           return (
-            <QuestionArtist
+            <ArtistQuestionScreenWrapped
               questions={question}
               onAnswer={onAnswer}
               userErrors={userErrors}
@@ -39,13 +46,27 @@ class App extends PureComponent {
           );
         case GameType.GENRE:
           return (
-            <QuestionGenre
+            <GenreQuestionScreenWrapped
               questions={question}
               onAnswer={onAnswer}
               userErrors={userErrors}
             />
           );
       }
+    } else if ((questions.length <= step) && (userErrors < errorCount)) {
+      return (
+        <WinScreen
+          questionsCount={questions.length}
+          errorsCount={userErrors}
+          onReplayBtnClick={onReplayBtnClick}
+        />
+      );
+    } else if (userErrors >= errorCount) {
+      return (
+        <GameOverScreen
+          onReplayBtnClick={onReplayBtnClick}
+        />
+      );
     }
     return null;
   }
@@ -60,14 +81,14 @@ class App extends PureComponent {
             {this._renderGameScreen()}
           </Route>
           <Route exact path="/dev-artist">
-            <QuestionArtist
+            <ArtistQuestionScreenWrapped
               questions={questions[0]}
               onAnswer={() => {}}
               userErrors={userErrors}
             />
           </Route>
           <Route exact path="/dev-genre">
-            <QuestionGenre
+            <GenreQuestionScreenWrapped
               questions={questions[1]}
               onAnswer={() => {}}
               userErrors={userErrors}
@@ -90,11 +111,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onAnswer: (question, answer) => {
-      dispatch(incrementStep());
       dispatch(incrementErrors(question, answer));
-      dispatch(checkNewGame());
+      dispatch(incrementStep());
     },
-    onWelcomeButtonClick: () => dispatch(incrementStep())
+    onWelcomeButtonClick: () => dispatch(incrementStep()),
+    onReplayBtnClick: () => dispatch(resetGame())
   };
 };
 
@@ -104,7 +125,8 @@ App.propTypes = {
   step: PropTypes.number.isRequired,
   onAnswer: PropTypes.func.isRequired,
   onWelcomeButtonClick: PropTypes.func.isRequired,
-  userErrors: PropTypes.number.isRequired
+  userErrors: PropTypes.number.isRequired,
+  onReplayBtnClick: PropTypes.func.isRequired,
 };
 
 export {App};

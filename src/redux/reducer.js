@@ -1,5 +1,5 @@
 import questions from './../components/mocks/questions.js';
-import {ActionType} from './actionType.js';
+import {ActionType} from './action-type.js';
 import {extend} from './../utils.js';
 
 const initialState = {
@@ -15,12 +15,8 @@ export default function reducer(state = initialState, action) {
       return extend(state, {step: state.step + action.payload});
     case ActionType.INCREMENT_ERRORS:
       return extend(state, {errors: state.errors + action.payload});
-    case ActionType.CHECK_NEW_GAME:
-      if (state.step >= questions.length) {
-        return extend(state, initialState);
-      } else {
-        return state;
-      }
+    case ActionType.RESET_GAME:
+      return extend(state, initialState);
     default:
       return state;
   }
